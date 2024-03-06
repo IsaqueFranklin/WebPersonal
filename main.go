@@ -21,3 +21,5 @@ func main(){
   http.HandleFunc("/", h1)
   log.Fatal(http.ListenAndServe(":8000", nil))
 }
+
+//bloating go text.
