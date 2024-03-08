@@ -1,25 +1,31 @@
 package main
 
 import (
-  "fmt"
-  "html/template"
- // "time"
-  "log"
-  "net/http"
- // "github.com/gofiber/fiber/v2"
+  //"fmt"
+  //"log" 
+  //"html/template"
+  "github.com/gofiber/template/html/v2"
+  "github.com/gofiber/fiber/v2"
+  //"github.com/gofiber/template/html/v2"
 )
 
-func main(){
-  fmt.Println("Hello web.")
+func main() {
+    app := fiber.New(fiber.Config{
+      Views: html.New("./views", ".html"),
+    })
 
-  h1 := func(w http.ResponseWriter, r *http.Request){
-    templ := template.Must(template.ParseFiles("index.html"))
-    templ.Execute(w, nil)
-  }
+    app.Static("/", "./public", fiber.Static{
+      Compress: true,
+    })
 
- 
-  http.HandleFunc("/", h1)
-  log.Fatal(http.ListenAndServe(":8000", nil))
+    app.Get("/", func(c *fiber.Ctx) error {
+        return c.Render("index", fiber.Map{})
+    })
+
+    app.Get("/about", func(c *fiber.Ctx) error {
+      return c.Render("about", fiber.Map{})
+    })
+
+    app.Listen(":4000")
 }
-
 //bloating go text.
