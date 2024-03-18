@@ -19,7 +19,7 @@ func main() {
     })
 
     app.Get("/", func(c *fiber.Ctx) error {
-        return c.Render("index", fiber.Map{})
+      return c.Render("index", fiber.Map{})
     })
 
     app.Get("/about", func(c *fiber.Ctx) error {
