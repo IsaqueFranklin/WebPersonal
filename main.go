@@ -26,6 +26,10 @@ func main() {
       return c.Render("about", fiber.Map{})
     })
 
+    app.Get("/hackerman", func(c *fiber.Ctx) error {
+      return c.Render("hackerman", fiber.Map{})
+    })
+
     app.Listen(":4000")
 }
 //bloating go text.
