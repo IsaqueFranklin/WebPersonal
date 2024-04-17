@@ -1,9 +1,10 @@
 package main
 
 import (
-  //"fmt"
-  //"log" 
-  //"html/template"
+  "fmt"
+  "log"
+  "os"
+  "context"
   "github.com/joho/godotenv"
   "github.com/gofiber/template/html/v2"
   "github.com/gofiber/fiber/v2"
@@ -26,17 +27,17 @@ func main() {
 
   //Conectando ao MongoDB com MongoDriver para Go.
   clientOptions := options.Client().ApplyURI(uri)
-  
-  //Context mongo.
-  ctx := context.Background()
 
+  //Context do mongo
+  ctx := context.Background()
+  
   //Conectando ao cliente mongo.
   client, err := mongo.Connect(ctx, clientOptions)
   if err != nil {
     log.Fatal(err)
   }
 
-  //Verificando a conexão com o banco de dados
+  //Verificando a conexão com o banco de dados e ctx 
   err = client.Ping(ctx, nil)
   if err != nil {
     log.Fatal(err)
@@ -58,11 +59,11 @@ func main() {
   app.Get("/", func(c *fiber.Ctx) error {
 
     //Definindo filtro para query na database
-    filter := bson.D{{"owner":"65ab15e49b0ef4a5b4b62910"}}
+    filter := bson.D{{Key: "owner", Value:"65ab15e49b0ef4a5b4b62910"}}
 
     //Executando query no banco de dados
     var result bson.M 
-    err := collection.Find(ctx, filter).decode(&result)
+    err := collection.Find(ctx, filter).Decode(&result)
     if err != nil {
       log.Fatal(err)
     }
