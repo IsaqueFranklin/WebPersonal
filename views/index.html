@@ -61,11 +61,13 @@
       <div class="mb-8">
         <img class="hover:animate-pulse" src="https://i.kym-cdn.com/entries/icons/original/000/021/807/ig9OoyenpxqdCQyABmOQBZDI0duHk2QZZmWg2Hxd4ro.jpg" alt="hackerman">
       </div>
-      <div>
+      <div id="documents">
         <h2 class="text-lg font-semibold">Artigos politicamente incorretos:</h2>
-        <ol>
-          <li>post 1</li>
-        </ol>
+        {{ range .Documents }}
+          <div>
+            <h1>{{.Title}}</h1>
+          </div>
+        {{ end }}
       </div>
     </div>
     <div class="mt-8">

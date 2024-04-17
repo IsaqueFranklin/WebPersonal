@@ -1,6 +1,7 @@
 package main
 
 import (
+  "time"
   "fmt"
   "log"
   "os"
@@ -13,6 +14,20 @@ import (
   "go.mongodb.org/mongo-driver/mongo/options"
   "go.mongodb.org/mongo-driver/bson/primitive"
 )
+
+type Document struct {
+	ID          string    `json:"_id"`
+	Owner       string    `json:"owner"`
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	Content     string    `json:"content"`
+	Photos      []string   `json:"photos"`
+	Likes       []string  `json:"likes"`
+	EnviadoPara []string  `json:"EnviadoPara"`
+	Enviado     bool      `json:"enviado"`
+	CreatedAt   time.Time `json:"createdAt"`
+	UpdatedAt   time.Time `json:"updatedAt"`
+}
 
 func main() {
   
@@ -77,13 +92,17 @@ func main() {
     defer cursor.Close(ctx)
 
     //Iterando sobre os documentos encontrados
+    var documents []Document
     for cursor.Next(ctx) {
-      var result bson.M
-      if err := cursor.Decode(&result); err != nil {
+      var doc Document
+      if err := cursor.Decode(&doc); err != nil {
         log.Fatal(err)
       }
 
-      fmt.Println("Documento encontrado: ", result)
+      documents = append(documents, doc)
+
+      fmt.Println("Documento encontrado: ", doc)
+      fmt.Println("\n")
     }
 
     if err := cursor.Err(); err != nil {
@@ -91,7 +110,9 @@ func main() {
     }
     
     //fmt.Println("Documento mongo encontrado: ", result)
-    return c.Render("index", fiber.Map{})
+    return c.Render("index", fiber.Map{
+      "Documents": documents,
+    })
   })
 
   app.Get("/about", func(c *fiber.Ctx) error {
