@@ -11,6 +11,7 @@ import (
   "go.mongodb.org/mongo-driver/bson"
   "go.mongodb.org/mongo-driver/mongo"
   "go.mongodb.org/mongo-driver/mongo/options"
+  "go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func main() {
@@ -58,17 +59,38 @@ func main() {
 
   app.Get("/", func(c *fiber.Ctx) error {
 
+    //Criar um ObjectID para conseguir fazer query de posts meus no MongoDB.
+    objID, err := primitive.ObjectIDFromHex("65ab15e49b0ef4a5b4b62910") 
+    if err != nil {
+        log.Fatal(err)
+    }
+
     //Definindo filtro para query na database
-    filter := bson.D{{Key: "owner", Value:"65ab15e49b0ef4a5b4b62910"}}
+    filter := bson.D{{Key: "owner", Value: objID}}
 
     //Executando query no banco de dados
-    var result bson.M 
-    err := collection.Find(ctx, filter).Decode(&result)
+    //var result bson.M 
+    cursor, err := collection.Find(ctx, filter)
     if err != nil {
+      log.Fatalln(err)
+    }
+    defer cursor.Close(ctx)
+
+    //Iterando sobre os documentos encontrados
+    for cursor.Next(ctx) {
+      var result bson.M
+      if err := cursor.Decode(&result); err != nil {
+        log.Fatal(err)
+      }
+
+      fmt.Println("Documento encontrado: ", result)
+    }
+
+    if err := cursor.Err(); err != nil {
       log.Fatal(err)
     }
     
-    fmt.Println("Documento mongo encontrado: ", result)
+    //fmt.Println("Documento mongo encontrado: ", result)
     return c.Render("index", fiber.Map{})
   })
 
