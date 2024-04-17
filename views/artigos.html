@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Artigos ofensivos</title>
+    <link href="css/style.css" rel="stylesheet"> 
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="px-6 md:px-0 mx-auto my-auto items-center max-w-3xl justify-center py-4 lg:py-8 px-4">
+     <nav class="mb-4 font-light text-xl gap-8">
+      <a class="mx-2 lg:mx-4 hover:font-semibold" href="/">Home</a>
+      <a class="mx-2 lg:mx-4 hover:font-semibold" href="/about">Manifesto</a>
+      <a class="mx-2 lg:mx-4 hover:font-semibold" href="/artigos">Artigos</a>
+      <a class="mx-2 lg:mx-4 hover:font-semibold" href="">Outros</a>
+    </nav> 
+    <div id="documents" class="mt-6 lg:mt-12">
+      <img src="https://d7hftxdivxxvm.cloudfront.net/?height=630&quality=80&resize_to=fill&src=https%3A%2F%2Fartsy-media-uploads.s3.amazonaws.com%2FpuVL-xNOPI_ux2wPsn4PVA%252FWanderer%2Bthumb%2B800.jpg&width=1200" alt="isaque franklin" class="hover:animate-pulse" />
+      <h2 class="mt-8 mb-4 text-3xl font-light">Artigos politicamente incorretos:</h2>
+      <hr>
+      <div class="mt-8">
+        {{ range .Documents }}
+         <div class="mt-2">
+          <h1>{{.Title}}</h1>
+         </div>
+       {{ end }}
+      </div> 
+    </div>
+  </body>
+</html> 

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
+    <title>Isaque Franklin's Lair</title>
     <link href="css/style.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
@@ -11,7 +11,7 @@
     <nav class="mb-4 font-light text-xl gap-8">
       <a class="mx-2 lg:mx-4 hover:font-semibold" href="/">Home</a>
       <a class="mx-2 lg:mx-4 hover:font-semibold" href="/about">Manifesto</a>
-      <a class="mx-2 lg:mx-4 hover:font-semibold" href="">Artigos</a>
+      <a class="mx-2 lg:mx-4 hover:font-semibold" href="/artigos">Artigos</a>
       <a class="mx-2 lg:mx-4 hover:font-semibold" href="">Outros</a>
     </nav>
     <div class="flex pt-4 lg:pt-8 my-auto items-center mb-6">
@@ -62,12 +62,15 @@
         <img class="hover:animate-pulse" src="https://i.kym-cdn.com/entries/icons/original/000/021/807/ig9OoyenpxqdCQyABmOQBZDI0duHk2QZZmWg2Hxd4ro.jpg" alt="hackerman">
       </div>
       <div id="documents">
-        <h2 class="text-lg font-semibold">Artigos politicamente incorretos:</h2>
-        {{ range .Documents }}
-          <div>
-            <h1>{{.Title}}</h1>
-          </div>
-        {{ end }}
+        <h2 class="text-2xl font-light mb-4">Artigos politicamente incorretos:</h2>
+        <hr>
+        <div class="mt-8">
+          {{ range .Documents }}
+            <div class="mt-2">
+             <h1>{{.Title}}</h1>
+            </div>
+         {{ end }}
+        </div>
       </div>
     </div>
     <div class="mt-8">

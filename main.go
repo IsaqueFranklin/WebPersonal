@@ -62,7 +62,7 @@ func main() {
   fmt.Println("Conectado ao MongoDB.")
 
   //Definindo database e collection
-  collection := client.Database("test").Collection("posts") 
+  collection := client.Database("test").Collection("posts")
 
   app := fiber.New(fiber.Config{
     Views: html.New("./views", ".html"),
@@ -111,6 +111,47 @@ func main() {
     
     //fmt.Println("Documento mongo encontrado: ", result)
     return c.Render("index", fiber.Map{
+      "Documents": documents,
+    })
+  })
+
+  app.Get("/artigos", func(c *fiber.Ctx) error {
+    
+    //Criar um ObjectID para conseguir fazer query de posts meus no MongoDB.
+    objID, err := primitive.ObjectIDFromHex("65ab15e49b0ef4a5b4b62910") 
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    //Definindo filtro para query na database
+    filter := bson.D{{Key: "owner", Value: objID}}
+
+    //Executando query no banco de dados
+    //var result bson.M 
+    cursor, err := collection.Find(ctx, filter)
+    if err != nil {
+      log.Fatalln(err)
+    }
+    defer cursor.Close(ctx)
+
+    //Iterando sobre os documentos encontrados
+    var documents []Document
+    for cursor.Next(ctx) {
+      var doc Document
+      if err := cursor.Decode(&doc); err != nil {
+        log.Fatal(err)
+      }
+
+      documents = append(documents, doc)
+
+      fmt.Println("Documento encontrado: ", doc)
+      fmt.Println("\n")
+    }
+
+    if err := cursor.Err(); err != nil {
+      log.Fatal(err)
+    }
+    return c.Render("artigos", fiber.Map{
       "Documents": documents,
     })
   })
