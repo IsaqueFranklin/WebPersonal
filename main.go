@@ -45,7 +45,7 @@ func main() {
   fmt.Println("Conectado ao MongoDB.")
 
   //Definindo database e collection
-  collection := client.Database("").Collection("") 
+  collection := client.Database("test").Collection("posts") 
 
   app := fiber.New(fiber.Config{
     Views: html.New("./views", ".html"),
@@ -56,6 +56,18 @@ func main() {
   })
 
   app.Get("/", func(c *fiber.Ctx) error {
+
+    //Definindo filtro para query na database
+    filter := bson.D{{"owner":"65ab15e49b0ef4a5b4b62910"}}
+
+    //Executando query no banco de dados
+    var result bson.M 
+    err := collection.Find(ctx, filter).decode(&result)
+    if err != nil {
+      log.Fatal(err)
+    }
+    
+    fmt.Println("Documento mongo encontrado: ", result)
     return c.Render("index", fiber.Map{})
   })
 
