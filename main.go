@@ -16,7 +16,7 @@ import (
 )
 
 type Document struct {
-	ID          string    `json:"_id"`
+	ID          string    `bson:"_id"` 
 	Owner       string    `json:"owner"`
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
@@ -98,7 +98,9 @@ func main() {
       if err := cursor.Decode(&doc); err != nil {
         log.Fatal(err)
       }
-
+      
+      fmt.Println(doc.ID)
+      //fmt.Println("\n")
       documents = append(documents, doc)
 
       fmt.Println("Documento encontrado: ", doc)
@@ -107,7 +109,7 @@ func main() {
 
     if err := cursor.Err(); err != nil {
       log.Fatal(err)
-    }
+    } 
     
     //fmt.Println("Documento mongo encontrado: ", result)
     return c.Render("index", fiber.Map{
@@ -162,6 +164,13 @@ func main() {
 
   app.Get("/hackerman", func(c *fiber.Ctx) error {
     return c.Render("hackerman", fiber.Map{})
+  })
+
+  //Rota de leitura de posts advinda do MongoDB.
+
+  app.Get("/ler/:post", func(c *fiber.Ctx) error {
+    fmt.Println(c.Params("post"))
+    return nil
   })
 
   app.Listen(":4000")
