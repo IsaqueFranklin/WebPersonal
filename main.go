@@ -170,7 +170,45 @@ func main() {
 
   app.Get("/ler/:post", func(c *fiber.Ctx) error {
     fmt.Println(c.Params("post"))
-    return nil
+
+    //Criar um ObjectID para conseguir fazer query de posts meus no MongoDB.
+    objID, err := primitive.ObjectIDFromHex(c.Params("post")) 
+    if err != nil {
+        log.Fatal(err)
+    }
+
+    //Definindo filtro para query na database
+    filter := bson.D{{Key: "_id", Value: objID}}
+
+    //Executando query no banco de dados
+    //var result bson.M 
+    cursor, err := collection.Find(ctx, filter)
+    if err != nil {
+      log.Fatalln(err)
+    }
+    defer cursor.Close(ctx)
+
+    //Iterando sobre os documentos encontrados
+    var documents []Document
+    for cursor.Next(ctx) {
+      var doc Document
+      if err := cursor.Decode(&doc); err != nil {
+        log.Fatal(err)
+      }
+
+      documents = append(documents, doc)
+
+      fmt.Println("Documento encontrado: ", doc)
+      fmt.Println("\n")
+    }
+
+    if err := cursor.Err(); err != nil {
+      log.Fatal(err)
+    }
+    return c.Render("ler", fiber.Map{
+      "Documents": documents,
+    })
+
   })
 
   app.Listen(":4000")

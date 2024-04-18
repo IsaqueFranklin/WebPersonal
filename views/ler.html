@@ -1,1 +1,17 @@
-. 
+<!DOCTYPE html>
+<html lang="en">
+  {{range .Documents}}
+  <head id="documents">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title></title>
+    <link href="css/style.css" rel="stylesheet">
+  </head>
+  <body>
+    <div id="documents">
+      <h1>{{.Title}}</h1>
+      <p>{{.Description}}</p>
+    </div> 
+  </body>
+  {{end}}
+</html> 
