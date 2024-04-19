@@ -18,11 +18,11 @@
     </nav>
     <div id="documents" class="mt-6 lg:mt-12">
       <h1 class="text-3xl font-light">{{.Title}}</h1>
-      <p class="text-lg font-semibold mt-4">{{.Description}}</p>
-      <div class="mt-8" hx-trigger="load" hx-swap="outerHTML">
-        {{.Content}}
+      <p class="text-lg font-semibold mt-4 mb-8">{{.Description}}</p>
+      <div id="dynamic-content" class="mt-8" hx-post="/content/{{.ID}}" hx-trigger="load" hx-swap="outerHTML" hx-target="#dynamic-content">
+         
       </div>
     </div> 
-  </body>
+  </body> 
   {{end}}
 </html> 

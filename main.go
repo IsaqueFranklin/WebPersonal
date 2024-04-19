@@ -114,7 +114,7 @@ func main() {
     //fmt.Println("Documento mongo encontrado: ", result)
     return c.Render("index", fiber.Map{
       "Documents": documents,
-    })
+    }) 
   })
 
   app.Get("/artigos", func(c *fiber.Ctx) error {
@@ -233,6 +233,7 @@ func main() {
 
     //Iterando sobre os documentos encontrados
     var documents []Document
+    var documento string
     for cursor.Next(ctx) {
       var doc Document
       if err := cursor.Decode(&doc); err != nil {
@@ -240,17 +241,17 @@ func main() {
       }
 
       documents = append(documents, doc)
+      documento = doc.Content
 
-      fmt.Println("Documento encontrado: ", doc)
+      fmt.Println("Documento encontrado: ", documents)
       fmt.Println("\n")
     }
 
     if err := cursor.Err(); err != nil {
       log.Fatal(err)
     }
-    return c.Render("test", fiber.Map{
-      "Documents": documents,
-    })
+
+    return c.SendString(documento)  
   })
 
   app.Listen(":4000")
